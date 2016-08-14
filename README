@@ -1,0 +1,10 @@
+# bitrix24-python-sdk - Python wrapper for cloud Bitrix24 REST API
+
+[ usage ]
+>>> from bitrix24 import Bitrix24
+>>> bx24 = Bitrix24('YOUR_THIRD_LEVEL_DOMAIN', 'YOUR_AUTH_TOKEN')
+>>> bx24.call('app.info')
+{u'result': {u'STATUS': u'L', u'CODE': u'local.1234567890abcd.12345678', u'LICENSE': u'ru_project', u'PAYMENT_EXPIRED': u'N', u'DAYS': None, u'LANGUAGE_ID': u'ru', u'VERSION': 1, u'ID': u'2'}}
+
+[ Bitrix24 REST API documentation ]
+https://training.bitrix24.com/rest_help/
