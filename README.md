@@ -11,21 +11,22 @@ Python 2.6 or later.
     pip install bitrix24-python-sdk
     
 ##Usage example
+``` python
     from bitrix24 import Bitrix24
     bx24 = Bitrix24('YOUR_THIRD_LEVEL_DOMAIN', 'YOUR_AUTH_TOKEN')
     bx24.call('app.info')
-
+```
 ## Notes
 Some function needed determinate parameters consequence as described in Bitrix24 documentation. 
 For example, methods from scope "task":
-
+``` python
     bx24.call(
         'task.item.list',
         {'ORDER': {'GROUP_ID': 'asc'}},
         {'FILTER': {'GROUP_ID': 1,'REAL_STATUS': {0: STATE_NEW}}},
         {'PARAMS': {'NAV_PARAMS': {'nPageSize': 50, 'iNumPage': 2}}}
     )
-
+```
 ## License
 bitrix24-python-sdk is licensed under the MIT License - see the `LICENSE` file for details
 
