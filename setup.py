@@ -3,16 +3,17 @@
 """Setup file for Bitrix24"""
 
 from distutils.core import setup
-from bitrix24 import __author_email__, __version__, __author__
+from setuptools import find_packages
 
 setup(
     name='bitrix24-python-sdk',
-    version=__version__,
+    version='1.0.0b4',
     install_requires=['requests', 'multidimensional_urlencode'],
+    packages=find_packages(),
     url='https://github.com/gebvlad/bitrix24-python-sdk',
     license='MIT',
-    author=__author__,
-    author_email=__author_email__,
+    author='Vladislav Sikach',
+    author_email='github@sijmusic.info',
     description='Bitrix24 API wrapper',
     keywords='bitrix24 api rest',
     classifiers=[
