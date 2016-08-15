@@ -19,11 +19,6 @@ bitrix24-python-sdk is a simple API wrapper for working with Bitrix24 REST API
 - Bitrix24 API documentation - Russian: http://dev.1c-bitrix.ru/rest_help/
 
 
-Disclaimer
-==========
-
-I have tested this tool to the best of my ability, but understand that it may have bugs. Use at your own risk!
-
 Requirements
 ============
 
@@ -51,6 +46,34 @@ Quickstart
 
     print(bx24.call('app.info'))
     ...
+
+Notes
+=====
+
+For some functions the order of parameters is important.
+For example, methods from scope "task":
+
+.. code-block:: python
+
+    bx24.call(
+        'task.item.list',
+        {'ORDER': {'GROUP_ID': 'asc'}},
+        {'FILTER': {'GROUP_ID': 1,'REAL_STATUS': {0: STATE_NEW}}},
+        {'PARAMS': {'NAV_PARAMS': {'nPageSize': 50, 'iNumPage': 2}}}
+    )
+    ...
+
+Author
+======
+
+Vladislav Sikach - <github@sijmusic.info>
+See also the list of `contributors <https://github.com/gebvlad/bitrix24-python-sdk/graphs/contributorsn>`_ which participated in this project
+
+
+Need custom Bitrix24 application?
+=================================
+email: <github@sijmusic.info>
+
 
 TODO
 ====
