@@ -7,21 +7,21 @@ from setuptools import find_packages
 
 setup(
     name='bitrix24-python-sdk',
-    version='1.0.0b4',
+    version='1.0.1',
     install_requires=['requests', 'multidimensional_urlencode'],
     packages=find_packages(),
     url='https://github.com/gebvlad/bitrix24-python-sdk',
     license='MIT',
     author='Vladislav Sikach',
     author_email='github@sijmusic.info',
-    description='Bitrix24 API wrapper',
+    description='Bitrix24 REST API wrapper',
     keywords='bitrix24 api rest',
     classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
 
         # Indicate who your project is intended for
         'Intended Audience :: Developers',
