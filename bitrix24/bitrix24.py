@@ -106,3 +106,9 @@ class Bitrix24(object):
         except (ValueError, KeyError):
             result = dict(error='Error on decode oauth response [' + r.text + ']')
             return result
+
+    def get_tokens(self):
+        """Get access tokens
+        :return: dict
+        """
+        return {'auth_token': self.auth_token, 'refresh_token': self.refresh_token}
