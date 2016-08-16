@@ -23,11 +23,11 @@ class TestBitrix24WithCorrectAccessTokens(unittest.TestCase):
     def setUp(self):
         self.check_access_data()
         self.bx24 = Bitrix24(
-            '<YOUR_BITRIX24_THIRD_LEVEL_DOMAIN>',
+            self.access_data['domain'],
             self.access_data['auth_token'],
             self.access_data['refresh_token'],
-            '<YOUR_CLIENT_ID>',
-            '<YOUR_CLIENT_SECRET>'
+            self.access_data['client_id'],
+            self.access_data['client_secret']
         )
 
     def test_get_tokens(self):
