@@ -22,7 +22,7 @@ bitrix24-python-sdk is a simple API wrapper for working with Bitrix24 REST API
 Requirements
 ============
 
-- Python 2.6+ or 3.x
+- Python 2.6+ or 3.2+
 - requests
 - multidimensional_urlencode
 
@@ -32,7 +32,6 @@ Installation
 .. code-block:: bash
 
     pip install bitrix24-python-sdk
-    ...
 
 
 Quickstart
@@ -45,7 +44,6 @@ Quickstart
     bx24 = Bitrix24('YOUR_THIRD_LEVEL_DOMAIN', 'YOUR_AUTH_TOKEN')
 
     print(bx24.call('app.info'))
-    ...
 
 Notes
 =====
@@ -61,7 +59,6 @@ For example, methods from scope "task":
         {'FILTER': {'GROUP_ID': 1,'REAL_STATUS': {0: STATE_NEW}}},
         {'PARAMS': {'NAV_PARAMS': {'nPageSize': 50, 'iNumPage': 2}}}
     )
-    ...
 
 Tests
 =====
@@ -72,7 +69,6 @@ Tests
 .. code-block:: bash
 
     python -m unittest discover
-    ...
 
 
 Author
