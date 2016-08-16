@@ -74,17 +74,16 @@ Tests
 Author
 ======
 
-Vladislav Sikach - <github@sijmusic.info>
+Vladislav Sikach - `github@sijmusic.info <mailto:github@sijmusic.info>`_
 See also the list of `contributors <https://github.com/gebvlad/bitrix24-python-sdk/graphs/contributorsn>`_ which participated in this project
 
 
 Need custom Bitrix24 application?
 =================================
-email: <github@sijmusic.info>
+email: `github@sijmusic.info <mailto:github@sijmusic.info>`_
 
 
 TODO
 ====
 
 1. Documentation
-2. Tests
