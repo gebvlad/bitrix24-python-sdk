@@ -1,2 +1,4 @@
 include LICENSE
 include bitrix24
+include README.rst
+include tests
