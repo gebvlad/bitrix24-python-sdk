@@ -31,7 +31,6 @@ class TestBitrix24WithCorrectAccessTokens(unittest.TestCase):
         )
 
     def test_get_tokens(self):
-        self.skipTest('ddd')
         tokens = self.bx24.get_tokens()
         self.assertEqual(tokens, {'auth_token': self.access_data['auth_token'],
                                   'refresh_token': self.access_data['refresh_token']})
