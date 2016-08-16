@@ -31,7 +31,7 @@ Installation
 
 .. code-block:: bash
 
-    $ pip install bitrix24-python-sdk
+    pip install bitrix24-python-sdk
     ...
 
 
@@ -62,6 +62,18 @@ For example, methods from scope "task":
         {'PARAMS': {'NAV_PARAMS': {'nPageSize': 50, 'iNumPage': 2}}}
     )
     ...
+
+Tests
+=====
+
+1. Put your access data at tests/testBitrix24.py
+2. Run tests
+
+.. code-block:: bash
+
+    python -m unittest discover
+    ...
+
 
 Author
 ======
