@@ -5,4 +5,4 @@ from bitrix24 import *
 
 __author__ = 'Vladislav Sikach'
 __author_email__ = 'github@sijmusic.info'
-__version__ = '1.0.0b1'
+__version__ = '1.0.1'
