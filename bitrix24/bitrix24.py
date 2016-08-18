@@ -52,6 +52,10 @@ class Bitrix24(object):
         if method == '' or not isinstance(method, str):
             raise Exception('Empty Method')
 
+        if method == 'batch' and 'prepared' not in params1:
+            params1['cmd'] = self.prepare_batch(params1['cmd'])
+            params1['prepared'] = True
+
         encoded_parameters = ''
 
         for i in [params1, params2, params3, params4, {'auth': self.auth_token}]:
@@ -112,3 +116,26 @@ class Bitrix24(object):
         :return: dict
         """
         return {'auth_token': self.auth_token, 'refresh_token': self.refresh_token}
+
+    @staticmethod
+    def prepare_batch(params):
+        """
+        Prepare methods for batch call
+        :param params: dict
+        :return: dict
+        """
+        if not isinstance(params, dict):
+            raise Exception('Invalid `cmd` structure')
+
+        batched_params = dict()
+
+        for call_id in params:
+            if not isinstance(params[call_id], list):
+                raise Exception('Invalid `cmd` method description')
+            method = params[call_id].pop(0)
+            temp = ''
+            for i in params[call_id]:
+                temp += urlencode(i) + '&'
+            batched_params[call_id] = method + '?' + temp
+
+        return batched_params
