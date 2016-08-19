@@ -8,6 +8,7 @@ Contents:
 
    methods/common
    methods/log
+   methods/user
 
 
 Indices and tables

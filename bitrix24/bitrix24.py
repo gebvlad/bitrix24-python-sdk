@@ -68,7 +68,7 @@ class Bitrix24(object):
             # request url
             url = self.api_url % (self.domain, self.high_level_domain, method)
             # Make API request
-            r = post(url, params=encoded_parameters, timeout=self.timeout)
+            r = post(url, data=encoded_parameters, timeout=self.timeout)
             # Decode response
             result = loads(r.text)
         except ValueError:
@@ -125,14 +125,16 @@ class Bitrix24(object):
         :return: dict
         """
         if not isinstance(params, dict):
-            raise Exception('Invalid `cmd` structure')
+            raise Exception('Invalid \'cmd\' structure')
 
         batched_params = dict()
 
         for call_id in params:
             if not isinstance(params[call_id], list):
-                raise Exception('Invalid `cmd` method description')
+                raise Exception('Invalid \'cmd\' method description')
             method = params[call_id].pop(0)
+            if method == 'batch':
+                raise Exception('Batch call cannot contain batch methods')
             temp = ''
             for i in params[call_id]:
                 temp += urlencode(i) + '&'
