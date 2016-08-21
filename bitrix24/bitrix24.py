@@ -30,8 +30,8 @@ class Bitrix24(object):
         :param client_secret: Client secret for refreshing access tokens
         :param high_level_domain: High level domain of Bitrix24 cloud domain
         """
-        if high_level_domain not in ('ru', 'com', 'de'):
-            raise Exception('Unsupported high level domain')
+        if high_level_domain not in ('ru', 'com', 'de', 'ua', 'es', 'cn'):
+            raise Exception('Unsupported high level domain [%s]' % high_level_domain)
 
         self.domain = domain
         self.auth_token = auth_token
@@ -58,9 +58,14 @@ class Bitrix24(object):
 
         encoded_parameters = ''
 
+        # print params1
         for i in [params1, params2, params3, params4, {'auth': self.auth_token}]:
             if i is not None:
-                encoded_parameters += urlencode(i) + '&'
+                if 'cmd' in i:
+                    i = dict(i)
+                    encoded_parameters += self.encode_cmd(i['cmd']) + '&' + urlencode({'halt': i['halt']}) + '&'
+                else:
+                    encoded_parameters += urlencode(i) + '&'
 
         r = {}
 
@@ -72,9 +77,9 @@ class Bitrix24(object):
             # Decode response
             result = loads(r.text)
         except ValueError:
-            result = dict(error='Error on decode api response [' + r.text + ']')
+            result = dict(error='Error on decode api response [%s]' % r.text)
         except exceptions.ReadTimeout:
-            result = dict(error='Timeout waiting expired [' + str(self.timeout) + ' sec]')
+            result = dict(error='Timeout waiting expired [%s sec]' % str(self.timeout))
         except exceptions.ConnectionError:
             result = dict(error='Max retries exceeded [' + str(adapters.DEFAULT_RETRIES) + ']')
         if 'error' in result and result['error'] in ('NO_AUTH_FOUND', 'expired_token'):
@@ -108,7 +113,7 @@ class Bitrix24(object):
             info(['Tokens', self.auth_token, self.refresh_token])
             return True
         except (ValueError, KeyError):
-            result = dict(error='Error on decode oauth response [' + r.text + ']')
+            result = dict(error='Error on decode oauth response [%s]' % r.text)
             return result
 
     def get_tokens(self):
@@ -129,7 +134,7 @@ class Bitrix24(object):
 
         batched_params = dict()
 
-        for call_id in params:
+        for call_id in sorted(params.keys()):
             if not isinstance(params[call_id], list):
                 raise Exception('Invalid \'cmd\' method description')
             method = params[call_id].pop(0)
@@ -141,3 +146,16 @@ class Bitrix24(object):
             batched_params[call_id] = method + '?' + temp
 
         return batched_params
+
+    @staticmethod
+    def encode_cmd(cmd):
+        """Resort batch cmd by request keys and encode it
+        :param cmd: dict List methods for batch request with request ids
+        :return: str
+        """
+        cmd_encoded = ''
+
+        for i in sorted(cmd.keys()):
+            cmd_encoded += urlencode({'cmd': {i: cmd[i]}}) + '&'
+
+        return cmd_encoded
