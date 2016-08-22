@@ -14,31 +14,26 @@ adapters.DEFAULT_RETRIES = 10
 
 class Bitrix24(object):
     """Class for working with Bitrix24 cloud API"""
-    # Cloud Bitrix24 API endpoint
-    api_url = 'https://%s.bitrix24.%s/rest/%s.json'
+    # Bitrix24 API endpoint
+    api_url = 'https://%s/rest/%s.json'
     # Bitrix24 oauth server
     oauth_url = 'https://oauth.bitrix.info/oauth/token/'
     # Timeout for API request in seconds
     timeout = 60
 
-    def __init__(self, domain, auth_token, refresh_token='', client_id='', client_secret='', high_level_domain='ru'):
+    def __init__(self, domain, auth_token, refresh_token='', client_id='', client_secret=''):
         """Create Bitrix24 API object
-        :param domain: Cloud Bitrix24 third level domain 
-        :param auth_token: Auth token
-        :param refresh_token: Refresh token
-        :param client_id: Client ID for refreshing access tokens
-        :param client_secret: Client secret for refreshing access tokens
-        :param high_level_domain: High level domain of Bitrix24 cloud domain
+        :param domain: str Bitrix24 domain
+        :param auth_token: str Auth token
+        :param refresh_token: str Refresh token
+        :param client_id: str Client ID for refreshing access tokens
+        :param client_secret: str Client secret for refreshing access tokens
         """
-        if high_level_domain not in ('ru', 'com', 'de', 'ua', 'es', 'cn'):
-            raise Exception('Unsupported high level domain [%s]' % high_level_domain)
-
         self.domain = domain
         self.auth_token = auth_token
         self.refresh_token = refresh_token
         self.client_id = client_id
         self.client_secret = client_secret
-        self.high_level_domain = high_level_domain
 
     def call(self, method, params1=None, params2=None, params3=None, params4=None):
         """Call Bitrix24 API method
@@ -71,7 +66,7 @@ class Bitrix24(object):
 
         try:
             # request url
-            url = self.api_url % (self.domain, self.high_level_domain, method)
+            url = self.api_url % (self.domain, method)
             # Make API request
             r = post(url, data=encoded_parameters, timeout=self.timeout)
             # Decode response

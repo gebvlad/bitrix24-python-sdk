@@ -9,6 +9,8 @@ Contents:
    methods/common
    methods/log
    methods/user
+   methods/task.item
+   methods/im
 
 
 Indices and tables
