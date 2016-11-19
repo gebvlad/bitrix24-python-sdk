@@ -85,6 +85,7 @@ class Bitrix24(object):
             result = self.call(method, params1, params2, params3, params4)
         elif 'error' in result and result['error'] in 'QUERY_LIMIT_EXCEEDED':
             # Suspend call on two second, wait for expired limitation time by Bitrix24 API
+            print 'SLEEP =)'
             sleep(2)
             return self.call(method, params1, params2, params3, params4)
         return result
@@ -94,7 +95,6 @@ class Bitrix24(object):
         :return:
         """
         r = {}
-
         try:
             # Make call to oauth server
             r = post(
@@ -154,3 +154,40 @@ class Bitrix24(object):
             cmd_encoded += urlencode({'cmd': {i: cmd[i]}}) + '&'
 
         return cmd_encoded
+
+    def batch(self, params):
+        """Batch calling without limits. Method automatically prepare method for batch calling
+        :param params:
+        :return:
+        """
+        if 'halt' not in params or 'cmd' not in params:
+            return dict(error='Invalid batch structure')
+
+        result = dict()
+
+        result['result'] = dict(
+            result_error={},
+            result_total={},
+            result={},
+            result_next={},
+        )
+        count = 0
+        batch = dict()
+        for request_id in sorted(params['cmd'].keys()):
+            batch[request_id] = params['cmd'][request_id]
+            count += 1
+            if len(batch) == 49 or count == len(params['cmd']):
+                temp = self.call('batch', {'halt': params['halt'], 'cmd': batch})
+                for i in temp['result']:
+                    if len(temp['result'][i]) > 0:
+                        result['result'][i] = self.merge_two_dicts(temp['result'][i], result['result'][i])
+                batch = dict()
+
+        return result
+
+    @staticmethod
+    def merge_two_dicts(x, y):
+        """Given two dicts, merge them into a new dict as a shallow copy."""
+        z = x.copy()
+        z.update(y)
+        return z

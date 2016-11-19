@@ -220,7 +220,7 @@ Return tasks
 
 **Result:** ::
 
- {u'next': 2,
+ {u'next': 50,
  u'result': [{u'ACCOMPLICES': [],
               u'ADD_IN_REPORT': u'N',
               u'ALLOWED_ACTIONS': {u'ACTION_ACCEPT': False,
@@ -294,6 +294,7 @@ Return tasks
               u'TIME_SPENT_IN_LOGS': None,
               u'TITLE': u'Test task #1',
               u'VIEWED_DATE': u'2016-08-21T16:01:07+03:00'}],
+              ...
  u'total': 212}
 
 

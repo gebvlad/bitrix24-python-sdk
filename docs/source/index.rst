@@ -10,6 +10,8 @@ Contents:
    methods/log
    methods/user
    methods/task.item
+   methods/task.checklistitem
+   methods/task.elapseditem
    methods/im
 
 
