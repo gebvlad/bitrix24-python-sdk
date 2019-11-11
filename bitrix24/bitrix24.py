@@ -40,14 +40,7 @@ class Bitrix24(object):
         """Call Bitrix24 API method
         :param method: Method name
         :param params1: Method parameters 1
-        :param params2: Method parameters 2. for values contains list of dicts
-        {
-            fields:
-                {
-                "EMAIL": [ {'VALUE': 'kabilov2011@gmail.com', 'ID': '8', 'TYPE_ID': 'EMAIL', 'VALUE_TYPE': 'HOME'} ],
-                },
-                'PHONE': [{'VALUE': '79057800087', 'VALUE_TYPE': 'WORK', 'TYPE_ID': 'PHONE'}]
-        }
+        :param params2: Method parameters 2. Needed for methods with determinate consequence of parameters
         :param params3: Method parameters 3. Needed for methods with determinate consequence of parameters
         :param params4: Method parameters 4. Needed for methods with determinate consequence of parameters
         :return: Call result
@@ -61,16 +54,13 @@ class Bitrix24(object):
 
         encoded_parameters = ''
 
-        for i in [params1, params3, params4, {'auth': self.auth_token}]:
+        for i in [params1, params2, params3, params4, {'auth': self.auth_token}]:
             if i is not None:
                 if 'cmd' in i:
                     i = dict(i)
                     encoded_parameters += self.encode_cmd(i['cmd']) + '&' + urlencode({'halt': i['halt']}) + '&'
                 else:
-                    encoded_parameters += urlencode(i) + '&'
-
-        if params2:
-            encoded_parameters += self.http_build_query(params2) + '&'
+                    encoded_parameters += self.http_build_query(i) + '&'
 
         r = {}
 
