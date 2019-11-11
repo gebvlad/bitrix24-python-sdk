@@ -7,6 +7,7 @@ from logging import info
 from time import sleep
 from requests import adapters, post, exceptions
 from multidimensional_urlencode import urlencode
+import urllib.parse
 
 # Retries for API request
 adapters.DEFAULT_RETRIES = 10
@@ -39,7 +40,14 @@ class Bitrix24(object):
         """Call Bitrix24 API method
         :param method: Method name
         :param params1: Method parameters 1
-        :param params2: Method parameters 2. Needed for methods with determinate consequence of parameters
+        :param params2: Method parameters 2. for values contains list of dicts
+        {
+            fields:
+                {
+                "EMAIL": [ {'VALUE': 'kabilov2011@gmail.com', 'ID': '8', 'TYPE_ID': 'EMAIL', 'VALUE_TYPE': 'HOME'} ],
+                },
+                'PHONE': [{'VALUE': '79057800087', 'VALUE_TYPE': 'WORK', 'TYPE_ID': 'PHONE'}]
+        }
         :param params3: Method parameters 3. Needed for methods with determinate consequence of parameters
         :param params4: Method parameters 4. Needed for methods with determinate consequence of parameters
         :return: Call result
@@ -53,14 +61,16 @@ class Bitrix24(object):
 
         encoded_parameters = ''
 
-        # print params1
-        for i in [params1, params2, params3, params4, {'auth': self.auth_token}]:
+        for i in [params1, params3, params4, {'auth': self.auth_token}]:
             if i is not None:
                 if 'cmd' in i:
                     i = dict(i)
                     encoded_parameters += self.encode_cmd(i['cmd']) + '&' + urlencode({'halt': i['halt']}) + '&'
                 else:
                     encoded_parameters += urlencode(i) + '&'
+
+        if params2:
+            encoded_parameters += self.http_build_query(params2) + '&'
 
         r = {}
 
@@ -83,12 +93,46 @@ class Bitrix24(object):
                 return result
             # Repeat API request after renew token
             result = self.call(method, params1, params2, params3, params4)
+        elif result.get('error_description', ''):
+            print(result.get('error_description'))
+            return result
         elif 'error' in result and result['error'] in 'QUERY_LIMIT_EXCEEDED':
             # Suspend call on two second, wait for expired limitation time by Bitrix24 API
             print 'SLEEP =)'
             sleep(2)
             return self.call(method, params1, params2, params3, params4)
         return result
+
+    # https://stackoverflow.com/a/39082010/12354388
+    def http_build_query(self, data):
+        parents = list()
+        pairs = dict()
+
+        def renderKey(parents):
+            depth, outStr = 0, ''
+            for x in parents:
+                s = "[%s]" if depth > 0 or isinstance(x, int) else "%s"
+                outStr += s % str(x)
+                depth += 1
+            return outStr
+
+        def r_urlencode(data):
+            if isinstance(data, list) or isinstance(data, tuple):
+                for i in range(len(data)):
+                    parents.append(i)
+                    r_urlencode(data[i])
+                    parents.pop()
+            elif isinstance(data, dict):
+                for key, value in data.items():
+                    parents.append(key)
+                    r_urlencode(value)
+                    parents.pop()
+            else:
+                pairs[renderKey(parents)] = str(data)
+
+            return pairs
+
+        return urllib.parse.urlencode(r_urlencode(data))
 
     def refresh_tokens(self):
         """Refresh access tokens
